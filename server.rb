@@ -18,7 +18,7 @@ class Book
   validates :isbn, presence: true
 
   index({ title: 'text' })
-  index({ isbn: 1 }, { unique: true, name: "isbn_index" })
+  index({ isbn: 1 }, { unique: true, name: 'isbn_index' })
 
   scope :title, ->(title) { where(title: /^#{title}/) }
   scope :isbn, ->(isbn) { where(isbn: isbn) }
@@ -103,5 +103,11 @@ namespace '/api/v1' do
       status 422
       body BookSerializer.new(book).to_json
     end
+  end
+
+  delete '/books/:id' do |id|
+    book = Book.where(id: id).first
+    book.destroy if book
+    status 204
   end
 end
