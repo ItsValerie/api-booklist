@@ -82,4 +82,15 @@ namespace '/api/v1' do
     halt(404, { message: 'Sorry, Book Not Found' }.to_json) unless book
     BookSerializer.new(book).to_json
   end
+
+  post '/books ' do
+    book = Book.new(json_params)
+    if book.save
+      response.headers['Location'] = "#{base_url}/api/v1/books/#{book.id}"
+      status 201
+    else
+      status 422
+      body BookSerializer.new(book).to_json
+    end
+  end
 end
