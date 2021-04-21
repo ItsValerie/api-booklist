@@ -45,7 +45,7 @@ end
 
 # Endpoints
 get '/ ' do
-  'Welcome to BookList!'
+  "Welcome to Valerie's BookList!"
 end
 
 namespace '/api/v1' do
@@ -77,13 +77,13 @@ namespace '/api/v1' do
     books.map { |book| BookSerializer.new(book) }.to_json
   end
 
-  get '/books/:id ' do |id|
+  get '/books/:id' do |id|
     book = Book.where(id: id).first
-    halt(404, { message: 'Sorry, Book Not Found' }.to_json) unless book
+    halt(404, { message: 'Book Not Found' }.to_json) unless book
     BookSerializer.new(book).to_json
   end
 
-  post '/books ' do
+  post '/books' do
     book = Book.new(json_params)
     if book.save
       response.headers['Location'] = "#{base_url}/api/v1/books/#{book.id}"
